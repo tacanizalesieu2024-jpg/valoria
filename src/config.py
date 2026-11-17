@@ -12,8 +12,11 @@ POIS_PATH = ROOT / "data" / "madrid_pois.json"
 MODEL_PATH = ROOT / "models" / "price_model.joblib"
 
 # --- LLM settings (read from the .env file) ---
-LLM_API_KEY = os.getenv("OPENAI_API_KEY", "")
-LLM_MODEL = os.getenv("LLM_MODEL", "gpt-4o-mini")  # must support images for the photo step
+# Works with any OpenAI-compatible API. Default = Google Gemini (free tier).
+# For OpenAI instead: leave LLM_BASE_URL empty and set LLM_MODEL=gpt-4o-mini.
+LLM_API_KEY = os.getenv("LLM_API_KEY") or os.getenv("OPENAI_API_KEY", "")
+LLM_BASE_URL = os.getenv("LLM_BASE_URL", "https://generativelanguage.googleapis.com/v1beta/openai/")
+LLM_MODEL = os.getenv("LLM_MODEL", "gemini-3.5-flash")  # must support images for the photo step
 USE_LLM = bool(LLM_API_KEY)  # no key -> the app runs in offline "mock" mode
 
 # --- Market adjustment ---

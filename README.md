@@ -33,9 +33,9 @@ python -m venv .venv
 source .venv/bin/activate          # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 
-# 3. Add the API key
+# 3. Add the API key (free: aistudio.google.com -> Get API key)
 cp .env.example .env               # Windows: copy .env.example .env
-#    then open .env and paste the key after OPENAI_API_KEY=
+#    then open .env and paste the key after LLM_API_KEY=
 
 # 4. Train the price model (about 20-60 seconds)
 python -m src.train_model
@@ -43,6 +43,11 @@ python -m src.train_model
 # 5. Run the app
 streamlit run app.py
 ```
+
+**Which LLM?** By default the project uses Google Gemini through its free tier
+(OpenAI-compatible endpoint, settings in `.env`). Note: on the free tier, Google may
+use what you send to improve its products, so only send public listing data.
+Switching to OpenAI (paid) only needs a different key, base URL and model in `.env`.
 
 **No API key yet?** Everything still runs: the app switches to *mock mode*,
 using simple keyword rules instead of the LLM. This mode is also the backup if the
