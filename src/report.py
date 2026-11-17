@@ -4,6 +4,7 @@ from src.config import USE_LLM
 
 SYSTEM_PROMPT = """You are ValorIA, an AI assistant for real estate agents in Madrid.
 Write a short valuation report (max 250 words, Markdown) for a client.
+Always write in ENGLISH, even if the listing is in Spanish (keep Spanish place names).
 Use ONLY the numbers given to you; never change or invent figures.
 Structure: 1) Estimated value and range, 2) What drives the price (location, size,
 condition, features), 3) Comparison with similar flats, 4) Verdict on the asking

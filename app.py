@@ -59,6 +59,8 @@ if go:
         r = run(text, lat, lon, images=[p.getvalue() for p in photos or []],
                 asking_price=asking or None)
     v, f = r["valuation"], r["features"]
+    for w in r.get("warnings", []):
+        st.warning(w)
 
     st.divider()
     c1, c2, c3 = st.columns(3)

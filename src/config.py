@@ -16,7 +16,10 @@ MODEL_PATH = ROOT / "models" / "price_model.joblib"
 # For OpenAI instead: leave LLM_BASE_URL empty and set LLM_MODEL=gpt-4o-mini.
 LLM_API_KEY = os.getenv("LLM_API_KEY") or os.getenv("OPENAI_API_KEY", "")
 LLM_BASE_URL = os.getenv("LLM_BASE_URL", "https://generativelanguage.googleapis.com/v1beta/openai/")
-LLM_MODEL = os.getenv("LLM_MODEL", "gemini-3.5-flash")  # must support images for the photo step
+LLM_MODEL = os.getenv("LLM_MODEL", "gemini-3.1-flash-lite")  # must support images for the photo step
+# Backup models, tried in order if the main one is overloaded (comma-separated in .env)
+LLM_FALLBACK_MODELS = [m.strip() for m in os.getenv(
+    "LLM_FALLBACK_MODELS", "gemini-3.1-flash-lite,gemini-flash-lite-latest").split(",") if m.strip()]
 USE_LLM = bool(LLM_API_KEY)  # no key -> the app runs in offline "mock" mode
 
 # --- Market adjustment ---

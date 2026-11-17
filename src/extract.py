@@ -79,8 +79,16 @@ def _keyword_extract(text: str) -> dict:
     d["rooms"] = _number(r"(\d+)\s*(?:habitaciones|habitación|dormitorios|bedrooms?|rooms?)", t, int)
     d["baths"] = _number(r"(\d+)\s*(?:baños|baño|bathrooms?)", t, int)
     d["floor"] = _number(r"(\d+)\s*[ºª]?\s*(?:planta|floor)", t, int)
-    d["year_built"] = _number(r"(?:construido en|built in|año)\s*(\d{4})", t, int)
-    d["asking_price"] = _number(r"(\d{2,3}(?:[.,]\d{3})+)\s*(?:€|eur)", t)
+    if d["floor"] is None:
+        words = {"bajo": 0, "ground": 0, "primer": 1, "first": 1, "segund": 2, "second": 2,
+                 "tercer": 3, "third": 3, "cuart": 4, "fourth": 4, "quint": 5, "fifth": 5,
+                 "sext": 6, "sixth": 6, "séptim": 7, "seventh": 7, "octav": 8, "eighth": 8}
+        m = re.search(r"(bajo|ground|primer|first|segund|second|tercer|third|cuart|fourth|quint|fifth|"
+                      r"sext|sixth|séptim|seventh|octav|eighth)\w*\s+(?:planta|floor)", t)
+        d["floor"] = words[m.group(1)] if m else None
+    d["year_built"] = _number(r"(?:construido en|built in|año|finca de|building from|edificio de)\s*(\d{4})", t, int)
+    m = re.search(r"(\d{1,3}(?:[.,]\d{3})+|\d{5,})\s*(?:€|eur)", t)
+    d["asking_price"] = float(re.sub(r"[.,]", "", m.group(1))) if m else None  # 520.000 € or 520,000 €
     if any(k in t for k in ["obra nueva", "new build", "a estrenar"]):
         d["condition"] = "new"
     elif any(k in t for k in ["a reformar", "para reformar", "needs renovation", "to renovate"]):
