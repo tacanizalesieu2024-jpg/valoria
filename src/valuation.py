@@ -50,3 +50,21 @@ def find_comparables(features: dict, k: int = 5) -> pd.DataFrame:
     comps["price_per_m2"] = comps["price"] / comps["area_m2"]
     return comps[["area_m2", "rooms", "baths", "has_lift", "has_terrace",
                   "price", "price_per_m2", "latitude", "longitude"]]
+
+
+READABLE = {
+    "area_m2": "Size (m²)", "latitude": "Location (north–south)", "longitude": "Location (east–west)",
+    "baths": "Bathrooms", "has_lift": "Lift", "dist_castellana_km": "Distance to Castellana",
+    "dist_center_km": "Distance to centre", "dist_metro_km": "Distance to metro", "rooms": "Bedrooms",
+    "year_built": "Year built", "floor": "Floor", "has_doorman": "Doorman", "has_terrace": "Terrace",
+    "has_parking": "Parking", "has_pool": "Pool", "is_exterior": "Exterior", "condition_new": "New build",
+    "condition_to_renovate": "Needs renovation", "has_air_conditioning": "Air conditioning",
+}
+
+
+def price_drivers(top: int = 8) -> pd.DataFrame:
+    """What the random forest relies on most (feature importance), with readable names."""
+    b = _load()
+    imp = pd.Series(b["model"].feature_importances_, index=b["features"]).sort_values(ascending=False).head(top)
+    return pd.DataFrame({"driver": [READABLE.get(f, f.replace("_", " ").capitalize()) for f in imp.index],
+                         "importance": imp.values})

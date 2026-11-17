@@ -1,0 +1,11 @@
+# ValorIA look for the demo: warm Madrid tones, light theme (reads better on a projector).
+[theme]
+base = "light"
+primaryColor = "#0E7C66"
+backgroundColor = "#FBFAF7"
+secondaryBackgroundColor = "#F3EEE7"
+textColor = "#1B2733"
+font = "sans serif"
+
+[browser]
+gatherUsageStats = false
