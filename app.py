@@ -118,6 +118,9 @@ if "result" in st.session_state:
     st.markdown(ui.price_card(v, f.get("asking_price")), unsafe_allow_html=True)
     st.markdown(ui.facts_row(f), unsafe_allow_html=True)
     st.markdown(ui.chips(f), unsafe_allow_html=True)
+    if f.get("estimated"):
+        st.caption("Marked *estimated*: not mentioned in the listing, so filled in from the 15 most similar "
+                   "flats in our dataset.")
 
     t_report, t_photos, t_comps, t_model, t_raw = st.tabs(
         ["📝 Report", "📷 Photos", "📍 Comparables", "📊 Price drivers", "🔎 Extracted data"])
@@ -156,8 +159,8 @@ if "result" in st.session_state:
         st.pydeck_chart(pdk.Deck(layers=[layer], map_style="light",
                                  initial_view_state=pdk.ViewState(latitude=r["lat"], longitude=r["lon"], zoom=14),
                                  tooltip={"text": "{kind}\n{label}"}))
-        st.caption(f"Green = this flat (location from {r['source']}). Blue = the 5 most similar flats by "
-                   "location and size in the training data.")
+        st.caption(f"Green = this flat (location from {r['source']}). Blue = the 5 most similar flats in our "
+                   "dataset (similarity search on location, size, bedrooms, lift, exterior and condition).")
         table = pd.DataFrame({
             "Size": comps["area_m2"].map(lambda x: f"{x:.0f} m²"),
             "Bedrooms": comps["rooms"].astype(int), "Bathrooms": comps["baths"].astype(int),

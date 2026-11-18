@@ -160,6 +160,8 @@ def facts_row(f: dict) -> str:
             val = int(val)
         if key == "condition" and val != "–":
             val = str(val).replace("_", " ").capitalize()
+        if key in (f.get("estimated") or []):
+            label += " · estimated"  # not in the listing: filled from similar flats in our dataset
         cells.append(f'<div class="vx-fact"><i>{icon}</i><b>{escape(str(val))}</b><span>{label}</span></div>')
     return _html('<div class="vx-card"><div class="vx-facts">' + "".join(cells) + "</div></div>")
 

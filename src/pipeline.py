@@ -9,7 +9,7 @@ import sys
 
 from src import extract, report, vision
 from src.features import distances
-from src.valuation import find_comparables, value_flat
+from src.valuation import fill_missing, find_comparables, value_flat
 
 CONDITION_FLAGS = {"new": (1, 0), "to_renovate": (0, 1), "good": (0, 0), "unknown": (0, 0)}
 
@@ -44,6 +44,7 @@ def run(listing_text: str, latitude: float, longitude: float,
     if asking_price:
         features["asking_price"] = asking_price
 
+    features = fill_missing(features)                              #    gaps filled from similar flats
     step("Valuing with the random forest model…")
     valuation = value_flat(features)                                # 3. ML model sets price
     step("Finding comparable flats nearby…")
