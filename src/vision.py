@@ -2,7 +2,22 @@
 
 Bonus feature (Week 3). If it is not ready in time, the app simply skips it.
 """
+import io
+
 from src.config import USE_LLM
+
+
+def shrink(img: bytes, max_side: int = 1024) -> bytes:
+    """Resize a photo to at most 1024 px and save as JPEG: faster and cheaper to send to the AI."""
+    try:
+        from PIL import Image
+        im = Image.open(io.BytesIO(img)).convert("RGB")
+        im.thumbnail((max_side, max_side))
+        out = io.BytesIO()
+        im.save(out, format="JPEG", quality=85)
+        return out.getvalue()
+    except Exception:  # noqa: BLE001 - if anything fails, send the original
+        return img
 
 SYSTEM_PROMPT = """You are an experienced property appraiser in Madrid.
 Look at the photos of one flat and return ONLY a JSON object:
@@ -18,4 +33,5 @@ def assess_photos(images: list[bytes]) -> dict | None:
     if not USE_LLM:
         return {"condition": None, "notes": "Photo analysis needs an API key (mock mode)."}
     from src.llm import ask_json
-    return ask_json(SYSTEM_PROMPT, "Rate the condition of this flat.", images=images[:4])
+    small = [shrink(img) for img in images[:4]]
+    return ask_json(SYSTEM_PROMPT, "Rate the condition of this flat.", images=small)

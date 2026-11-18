@@ -5,8 +5,9 @@ Folder format (one folder per listing) inside data/demo_listings/:
     data/demo_listings/
         chamberi_example/
             listing.txt      <- the listing text (required)
-            info.json        <- optional: {"neighbourhood": "Chamberí", "address": "", "asking_price": 520000}
-            photo1.jpg       <- optional: 2-4 photos (jpg/jpeg/png)
+            info.json        <- optional: {"neighbourhood": "Chamberí", "address": "", "asking_price": 520000,
+                                          "latitude": 40.43, "longitude": -3.70}  (exact spot, no internet needed)
+            photo1.jpg       <- optional: 2-4 photos (jpg/jpeg/png/webp)
             photo2.jpg
 
 The folder name becomes the label in the app ("chamberi_example" -> "Chamberi example").
@@ -17,7 +18,7 @@ from pathlib import Path
 from src.config import ROOT
 
 DEMO_DIR = ROOT / "data" / "demo_listings"
-PHOTO_TYPES = {".jpg", ".jpeg", ".png"}
+PHOTO_TYPES = {".jpg", ".jpeg", ".png", ".webp"}
 
 
 def list_demos() -> dict[str, Path]:
@@ -38,6 +39,7 @@ def load_demo(folder: Path) -> dict:
         "neighbourhood": info.get("neighbourhood"),
         "address": info.get("address", ""),
         "asking_price": info.get("asking_price") or 0,
+        "coords": (info["latitude"], info["longitude"]) if "latitude" in info and "longitude" in info else None,
         "photos": [p.read_bytes() for p in photos[:4]],
         "photo_names": [p.name for p in photos[:4]],
     }

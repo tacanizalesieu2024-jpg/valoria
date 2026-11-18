@@ -25,7 +25,7 @@ st.markdown(ui.CSS, unsafe_allow_html=True)
 st.markdown(ui.header(), unsafe_allow_html=True)
 
 for key, default in {"listing_text": "", "hood": "Sol (centre)", "address": "", "asking": 0,
-                     "demo_photos": [], "demo_choice": "—"}.items():
+                     "demo_photos": [], "demo_choice": "—", "demo_coords": None}.items():
     st.session_state.setdefault(key, default)
 
 DEMOS = list_demos()
@@ -36,12 +36,14 @@ def load_selected_demo():
     choice = st.session_state.demo_choice
     if choice == "—":
         st.session_state.demo_photos = []
+        st.session_state.demo_coords = None
         return
     d = load_demo(DEMOS[choice])
     st.session_state.listing_text = d["text"]
     st.session_state.address = d["address"]
     st.session_state.asking = int(d["asking_price"])
     st.session_state.demo_photos = d["photos"]
+    st.session_state.demo_coords = d["coords"]
     if d["neighbourhood"] in NEIGHBOURHOODS:
         st.session_state.hood = d["neighbourhood"]
     st.session_state.pop("result", None)
@@ -66,7 +68,7 @@ with left:
     st.text_area("Listing text (Spanish or English)", key="listing_text", height=190,
                  placeholder="Paste a listing, or pick one in 'Load a demo listing' on the left")
     uploads = st.file_uploader("Photos (optional: kitchen, bathroom, living room)",
-                               type=["jpg", "jpeg", "png"], accept_multiple_files=True)
+                               type=["jpg", "jpeg", "png", "webp"], accept_multiple_files=True)
     if st.session_state.demo_photos and not uploads:
         st.caption(f"Using {len(st.session_state.demo_photos)} photo(s) from the demo listing")
         st.image(st.session_state.demo_photos, width=110)
@@ -78,6 +80,8 @@ with right:
 
 
 def locate(address: str, hood: str):
+    if st.session_state.demo_coords and not address:  # exact spot saved with the demo listing
+        return (*st.session_state.demo_coords, "saved location")
     if address:
         try:
             from geopy.geocoders import Nominatim
