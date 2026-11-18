@@ -11,7 +11,8 @@ import re
 from src.config import LLM_API_KEY, LLM_BASE_URL, LLM_FALLBACK_MODELS, LLM_MODEL
 
 _client = None
-RETRYABLE = ("429", "500", "503", "404", "overloaded", "unavailable", "not found", "RESOURCE_EXHAUSTED")
+RETRYABLE = ("429", "500", "503", "404", "overloaded", "unavailable", "not found", "RESOURCE_EXHAUSTED",
+             "timed out", "timeout")
 
 
 def _get_client():

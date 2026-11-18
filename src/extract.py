@@ -17,9 +17,16 @@ BOOL_FIELDS = [
 
 SYSTEM_PROMPT = f"""You are a real estate data assistant for Madrid.
 Read a property listing (Spanish or English) and return ONLY a JSON object with these keys:
-- area_m2 (number), rooms (int), baths (int), floor (int, 0 = ground floor), year_built (int or null)
+- area_m2 (number, built m2 "construidos" if given), rooms (int, bedrooms), baths (int),
+  floor (int, 0 = ground floor / "bajo"), year_built (int or null)
+- baths: count EVERY bathroom, en-suite bathroom and guest toilet ("aseo", "powder room",
+  "toilet") as one each. Example: "two en-suite bathrooms and a guest toilet" = 3.
 - {", ".join(BOOL_FIELDS)}: 1 if the listing clearly says so, else 0
-- condition: one of "new", "good", "to_renovate", "unknown"
+- condition: one of "new", "good", "to_renovate", "unknown". Use these exact meanings:
+    "new" = ONLY a newly built development ("obra nueva", "new build", "promoción").
+    "good" = a second-hand home in good condition, INCLUDING renovated / refurbished /
+             "reformado" / "a estrenar tras reforma" / "move-in ready" homes.
+    "to_renovate" = needs renovation ("a reformar", "para reformar", "needs updating").
 - address: street and neighbourhood if mentioned, else null
 - asking_price: number in euros if mentioned, else null
 - highlights: list of up to 4 short selling points in English

@@ -18,6 +18,7 @@ from src.extract import _clean, _keyword_extract, _llm_extract
 
 INPUT = ROOT / "data" / "accuracy_test" / "accuracy_listings.xlsx"
 OUT = ROOT / "docs"
+OUT_SUFFIX = ""
 NUMERIC = ["area_m2", "rooms", "baths", "floor"]
 BOOLEAN = ["has_lift", "has_terrace", "is_exterior", "has_parking", "has_air_conditioning"]
 FIELDS = NUMERIC + BOOLEAN + ["condition"]
@@ -68,11 +69,16 @@ def run_test():
     for i, r in df.reset_index(drop=True).iterrows():
         text = str(r["listing_text"])
         offline = _clean(_keyword_extract(text))
-        try:
-            llm = _clean(_llm_extract(text))
-        except Exception as e:  # noqa: BLE001
-            print(f"  listing {i + 1}: LLM failed ({type(e).__name__}), counted as wrong")
-            llm = {}
+        llm = {}
+        for attempt in range(3):  # a timeout is a network problem, not a reading mistake: retry
+            try:
+                llm = _clean(_llm_extract(text))
+                break
+            except Exception as e:  # noqa: BLE001
+                print(f"  listing {i + 1}: LLM failed ({type(e).__name__}), retry {attempt + 1}/2")
+                time.sleep(10)
+        else:
+            print(f"  listing {i + 1}: LLM failed 3 times, counted as wrong")
         for field in FIELDS:
             truth = _truth(r.get(field), field)
             if truth is None:
@@ -127,16 +133,20 @@ def chart(summary: pd.DataFrame):
             fontsize=9, color=muted)
     fig.tight_layout()
     (OUT / "figures").mkdir(parents=True, exist_ok=True)
-    fig.savefig(OUT / "figures" / "accuracy_llm_vs_offline.png", facecolor="white")
+    fig.savefig(OUT / "figures" / f"accuracy_llm_vs_offline{OUT_SUFFIX}.png", facecolor="white")
     plt.close(fig)
 
 
 def main():
+    import sys
+    tag = sys.argv[1] if len(sys.argv) > 1 else ""   # e.g. "v2" -> files named accuracy_results_v2.csv
+    global OUT_SUFFIX
+    OUT_SUFFIX = f"_{tag}" if tag else ""
     print(f"Reading {INPUT.name}")
     detail, n = run_test()
     summary = summarise(detail)
-    detail.to_csv(OUT / "accuracy_detail.csv", index=False)
-    summary.to_csv(OUT / "accuracy_results.csv")
+    detail.to_csv(OUT / f"accuracy_detail{OUT_SUFFIX}.csv", index=False)
+    summary.to_csv(OUT / f"accuracy_results{OUT_SUFFIX}.csv")
     table = ["| Field | Checks | Gemini (LLM) | Keyword rules |", "|---|---|---|---|"]
     for f, r in summary.iterrows():
         name = "**All fields**" if f == "ALL FIELDS" else LABELS[f]
@@ -145,10 +155,10 @@ def main():
           f"answers were checked against the listing's facts box, which neither method saw.\n\n"
           + "\n".join(table) + "\n\nChart: `figures/accuracy_llm_vs_offline.png` · "
           "Every single check: `accuracy_detail.csv`\n")
-    (OUT / "ACCURACY_RESULTS.md").write_text(md, encoding="utf-8")
+    (OUT / f"ACCURACY_RESULTS{OUT_SUFFIX}.md").write_text(md, encoding="utf-8")
     chart(summary)
     print("\n" + "\n".join(table))
-    print("\nSaved docs/ACCURACY_RESULTS.md, docs/accuracy_results.csv, docs/accuracy_detail.csv and the chart")
+    print(f"\nSaved docs/ACCURACY_RESULTS{OUT_SUFFIX}.md, accuracy_results{OUT_SUFFIX}.csv, accuracy_detail{OUT_SUFFIX}.csv and the chart")
 
 
 if __name__ == "__main__":
