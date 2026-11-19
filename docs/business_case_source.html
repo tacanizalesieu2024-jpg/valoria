@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>ValorIA: Company and Business Case</title>
+<style>
+  @page { size: A4; margin: 20mm 20mm 18mm 20mm; }
+  body { font-family: Arial, Helvetica, sans-serif; font-size: 10.5pt; line-height: 1.45; color: #1B2733; }
+  h1 { font-size: 19pt; margin: 0 0 4pt 0; }
+  .sub { color: #6B7280; font-size: 9.5pt; margin-bottom: 14pt; }
+  h2 { font-size: 12.5pt; margin: 14pt 0 4pt 0; color: #0E5C4C; }
+  p { margin: 0 0 7pt 0; text-align: justify; }
+  blockquote { margin: 4pt 0 8pt 0; padding: 4pt 10pt; border-left: 3px solid #0E7C66; font-style: italic; background: #F4F7F6; }
+  ul { margin: 2pt 0 8pt 0; padding-left: 16pt; }
+  li { margin-bottom: 4pt; }
+  sup { font-size: 7pt; color: #0E5C4C; }
+  .sources { font-size: 8.5pt; line-height: 1.35; }
+  .sources li { margin-bottom: 2.5pt; word-break: break-word; }
+  .note { font-size: 8.5pt; color: #6B7280; }
+  a { color: #0E5C4C; text-decoration: none; }
+</style>
+</head>
+<body>
+
+<h1>ValorIA: Company and Business Case</h1>
+<div class="sub">AI Machine Learning Foundations · Group Work · November 2026</div>
+
+<h2>1. Company name</h2>
+<p>ValorIA joins <i>valor</i> (value) and <i>IA</i> (<i>inteligencia artificial</i>). It is short, easy to say in Spanish and English, and it describes the product in one word: an AI that puts a value on a home and explains it. The Spanish name also signals where we start: in a Spanish market and in its customers' own language.</p>
+
+<h2>2. Mission</h2>
+<blockquote>"Give every agent an AI appraiser that prices a flat in seconds and explains why."</blockquote>
+<p>Agents do not just need a number; they need an argument they can put in front of a seller. ValorIA reads the listing, looks at the photos, lets a machine learning model trained on Madrid listings calculate the price, and turns the result into a one-page report with comparable flats. The split is deliberate: the model sets the price, the AI explains it. Language models are unreliable with precise figures, so they never invent the number.</p>
+<p>The approach already works. Trained on 75,607 Madrid flats, our price model is off by 13% on average, half the error of a standard linear model (25%), measured with 5-fold cross-validation<sup>1</sup>. In a first test on 15 real Madrid listings, the AI read the descriptions correctly 81% of the time, against 55% for simple keyword rules<sup>2</sup>.</p>
+
+<h2>3. Vision</h2>
+<blockquote>"Become the standard pricing tool for real estate agencies in Spain, starting in Madrid."</blockquote>
+<p>Madrid comes first because it is the most expensive and most varied market in Spain, where the gap between a good and a bad price is widest in euros. Once the model and the report have proven themselves there, the same approach extends to other large Spanish cities, and from agencies to banks and property portals.</p>
+
+<h2>4. Target customer</h2>
+<p>Our first customers are small and mid-sized real estate agencies in Madrid that sell second-hand homes. Every week they must price new listings and then defend that price to sellers who usually expect more. Overprice and the flat sits unsold; underprice and the seller loses money and the agency loses trust.</p>
+<p>The sector is highly fragmented: Spain has 60,683 companies working in real estate on behalf of third parties<sup>3</sup>, most of them small and without the in-house analysts that large networks can afford. There is no reliable count of agencies in Madrid alone: the region's register of agents (RAIN) has been voluntary, and only 628 professionals had signed up by 2021<sup>4</sup>. In June 2026 the regional government announced that it will make the register compulsory<sup>5</sup>, which will make the market easier to size.</p>
+<p>The tools agents have today fall short. The free online valuations of the main portals ask for the address and a few basic details and return an estimated range from the portal's own algorithm<sup>6</sup>. They give a number, but they do not see a renovated kitchen, the light or the state of the bathrooms, and they do not explain themselves. ValorIA turns exactly those details into data and delivers a report an agent can hand to a client. Banks (pre-screening before an official <i>tasación</i>) and portals are a second stage. ValorIA is a pricing aid and pre-valuation, never a substitute for an official appraisal.</p>
+
+<h2>5. Revenue model</h2>
+<p>ValorIA is sold as a monthly subscription per agent, with a free trial of five reports so an agency can test it on its own listings before paying. Our proposed price is €49 per agent per month, in line with what Spanish agencies already pay for management software (for example, Mobilia's base plan starts at €49 per month<sup>7</sup>); it will be validated with agents during the trial. A subscription fits how agents work, since they price listings continuously, and it gives predictable income, while the cost of each report stays low. As an illustration, 100 Madrid agencies with three agents each would mean 300 subscriptions and about €176,000 of annual revenue. For the customer, the case is simple: on a home worth half a million euros, pricing one listing right is worth far more than a year of subscription.</p>
+
+<h2>6. Starting market: Madrid residential sales</h2>
+<p>The market is large, expensive and dominated by exactly the homes our tool is built for:</p>
+<ul>
+  <li><b>84,015</b> homes sold in the Comunidad de Madrid in 2025<sup>8</sup>, roughly one in eight of all home sales in Spain.</li>
+  <li><b>78%</b> of the 714,237 homes sold in Spain in 2025 were second-hand, our core segment; total sales rose 11.5%, their highest level since 2007<sup>9</sup>.</li>
+  <li><b>€6,458/m²</b>: average asking price in Madrid city in September 2026<sup>10</sup>, about 78% above the 2018 listings our model learned from (€3,632/m²)<sup>1</sup>. An 80 m² flat is therefore worth about €517,000, so a 5% pricing error is roughly €26,000.</li>
+  <li><b>€8.7 bn</b>: revenue of Spanish real estate agencies in 2025 (+9.4%), over 92% of the market for real estate consultancies and agencies<sup>11</sup>.</li>
+  <li><b>2021</b>: Zillow shut down its home-buying business after it had bought homes for more than it expected to sell them for, with inventory write-downs of about $304 million in one quarter and up to $265 million more expected, and a workforce cut of about 25%<sup>12</sup>. Our answer: the agent stays in charge, and every estimate comes with its reasons.</li>
+</ul>
+<p>Madrid's market is cooling while prices keep rising: notarial data published by the Ministry of Housing show Madrid sales down 4.7% in 2025<sup>8</sup>, and even INE's registry data show growth of only 4.8%, well below the national 11.5%<sup>9</sup>. In a slower market, an overpriced listing sits longer, and a well-argued price becomes more valuable. That is the moment ValorIA is built for.</p>
+
+<h2>Sources</h2>
+<ol class="sources">
+  <li>ValorIA team analysis of the idealista18 dataset (Madrid, 2018; ODbL 1.0): <i>docs/MODEL_RESULTS.md</i> in the project repository. Dataset: <a href="https://github.com/paezha/idealista18">github.com/paezha/idealista18</a></li>
+  <li>ValorIA team test on 15 real Idealista listings (November 2026): <i>docs/GENAI_ACCURACY.md</i>. The prompt was revised once after a first run on the same listings (first run: 60% vs. 55%).</li>
+  <li>DBK Informa, press release "Consultoras y agencias inmobiliarias", June 2026 (companies as of January 2025): <a href="https://www.dbk.es/en/detalle-nota/consultoras-agencias-inmobiliarias-2026">dbk.es/en/detalle-nota/consultoras-agencias-inmobiliarias-2026</a></li>
+  <li>Comunidad de Madrid, "Aumentamos a 628 el número de profesionales inscritos en el Registro de Agentes Inmobiliarios", 11 June 2021: <a href="https://www.comunidad.madrid/node/60330">comunidad.madrid/node/60330</a></li>
+  <li>idealista/news, "La Comunidad de Madrid impulsará el registro obligatorio para los agentes inmobiliarios", 29 June 2026: <a href="https://www.idealista.com/news/node/904122">idealista.com/news/node/904122</a></li>
+  <li>idealista/news, "Valora tu inmueble en 1 minuto": <a href="https://www.idealista.com/news/node/804502">idealista.com/news/node/804502</a></li>
+  <li>Hackceleration, "¿Cuál es el mejor programa de gestión para inmobiliarias en 2026?" (Mobilia: from €49/month excl. VAT, 1 user): <a href="https://www.hackceleration.com/es/labs/mejor/programa-gestion-inmobiliarias">hackceleration.com/es/labs/mejor/programa-gestion-inmobiliarias</a></li>
+  <li>Vozpópuli, "Madrid y Canarias rompen la tendencia del mercado inmobiliario: caen las ventas en un año récord", 12 March 2026, citing Ministerio de Vivienda data: <a href="https://www.vozpopuli.com/economia/madrid-y-canarias-rompen-la-tendencia-del-mercado-inmobiliario-caen-las-ventas-en-un-ano-record-.html">vozpopuli.com</a></li>
+  <li>INE, Estadística de Transmisiones de Derechos de la Propiedad, December 2025 and year 2025, 20 February 2026: <a href="https://ine.es/dyngs/Prensa/ETDP1225.htm">ine.es/dyngs/Prensa/ETDP1225.htm</a>; idealista/news, "Las compraventas de viviendas tocan máximos desde 2007": <a href="https://www.idealista.com/news/node/885348">idealista.com/news/node/885348</a></li>
+  <li>idealista/news, Madrid asking prices, September 2026 (published 2 October 2026): <a href="https://www.idealista.com/news/node/912288">idealista.com/news/node/912288</a></li>
+  <li>DBK Informa via idealista/news, "Las consultoras y agencias inmobiliarias facturaron 9.400 millones de euros en 2025": <a href="https://www.idealista.com/news/node/900100">idealista.com/news/node/900100</a></li>
+  <li>Zillow Group, "Zillow Group Reports Third-Quarter 2021 Financial Results &amp; Shares Plan to Wind Down Zillow Offers Operations", 2 November 2021: <a href="https://investors.zillowgroup.com/news-and-events/news/news-details/2021/Zillow-Group-Reports-Third-Quarter-2021-Financial-Results--Shares-Plan-to-Wind-Down-Zillow-Offers-Operations/default.aspx">investors.zillowgroup.com</a></li>
+</ol>
+<p class="note">The national and Madrid sales figures come from different official sources (INE registry data and Ministry of Housing notarial data), which count sales at different moments, so the Madrid share is approximate.</p>
+
+</body>
+</html>
