@@ -17,7 +17,7 @@ the listing and explains the result. LLMs are unreliable with precise numbers.
 | 4. Find comparables | `src/valuation.py` | 5 most similar flats nearby | Nearest neighbours (→ RAG upgrade) |
 | 5. Write the report | `src/report.py` | Numbers → client-ready explanation | LLM generation |
 
-`src/pipeline.py` connects the steps, and `app.py` is the Streamlit demo.
+`app.py` is the Streamlit demo: a guided 5-step flow (details → photos → AI analysis → valuation → report) with source labels on every fact and model-measured price drivers. `app_classic.py` is the earlier single-page version.
 
 ## Setup (about 10 minutes, everyone does this once)
 
